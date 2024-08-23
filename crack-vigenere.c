@@ -63,7 +63,8 @@ static size_t charset_index(char ch)
     fprintf(stderr, "%s: invalid char %d\n", __func__, ch);
     abort();
 }
-/* calculate incidence of coincidence of `text`
+
+/* calculate index of coincidence of `text`
  *
  * map will transform the characters before calculating the ioc. For example,
  * ioc(data, ..., tolower) will transform samples with tolower before checking
@@ -182,9 +183,9 @@ int main(int argc, char** argv)
     /* Find key length (stride)
      * ========================*/
 
-    /* values better than threshold immidiately break the loop */
     int key_len = 1;
     {
+        /* values better than threshold immidiately break the loop */
         constexpr double threshold = 1.6;
 
         double best_score = -1.0;
