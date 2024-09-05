@@ -158,7 +158,7 @@ static void vigenere_decode(struct str text, char* output, const char* key, size
 
 int main(int argc, char** argv)
 {
-    srand(time(NULL));
+    srand(0);
 
     FILE* f = argc < 2
         ? stdin
@@ -228,21 +228,17 @@ int main(int argc, char** argv)
         }
     }
 
-    /* print key */
+    /* print key to stdout (other info goes to stderr) */
     printf("key: ");
     for (size_t i = 0; i < key_len; i++) {
         printf("%c", charset[key[i]]);
     }
-    printf(" (");
-    for (size_t i = 0; i < key_len - 1; i++) {
-        printf("%d, ", key[i]);
-    }
-    printf("%d)", key[key_len - 1]);
-    printf("\n");
 
     vigenere_decode(text, text.data, key, key_len, charset, sizeof charset);
 
-    //str_println(text, stdout);
+    /* print preview to stderr to avoid clutter when piping */
+    fprintf(stderr, "preview:\n");
+    str_println(str_slice(text, 0, 79), stderr);
 
     str_free(&text);
 
