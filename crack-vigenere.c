@@ -45,7 +45,7 @@ static double charfreq_english[sizeof charset] = {
     ['Z' - 'A'] = 0.00074,
 };
 
-int do_nothing(int ch)
+static int do_nothing(int ch)
 {
     return ch;
 }
@@ -70,7 +70,7 @@ static size_t charset_index(char ch)
  * ioc(data, ..., tolower) will transform samples with tolower before checking
  * if they are equal
  * */
-double ioc(struct str text, int stride, int offset, int (*map)(int))
+static double ioc(struct str text, int stride, int offset, int (*map)(int))
 {
     assert(offset < stride);
     if (stride > text.len) {
@@ -182,7 +182,6 @@ int main(int argc, char** argv)
 
     /* Find key length (stride)
      * ========================*/
-
     int key_len = 1;
     {
         /* values better than threshold immidiately break the loop */
@@ -222,7 +221,7 @@ int main(int argc, char** argv)
             for (size_t i = 0; i < sizeof charset; i++) {
                 double n = frequency_correlation(frequencies, charfreq_english, i);
                 if (n > best) {
-                    key[col] = sizeof charset - i;
+                    key[col] = (sizeof charset - i) % sizeof charset;
                     best = n;
                 }
             }
@@ -234,11 +233,16 @@ int main(int argc, char** argv)
     for (size_t i = 0; i < key_len; i++) {
         printf("%c", charset[key[i]]);
     }
+    printf(" (");
+    for (size_t i = 0; i < key_len - 1; i++) {
+        printf("%d, ", key[i]);
+    }
+    printf("%d)", key[key_len - 1]);
     printf("\n");
 
     vigenere_decode(text, text.data, key, key_len, charset, sizeof charset);
 
-    str_println(text, stdout);
+    //str_println(text, stdout);
 
     str_free(&text);
 
