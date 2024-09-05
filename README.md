@@ -2,7 +2,7 @@
 # Vigenère cipher solver
 
 Uses index of coincidence and frequency analysis to find Vigenère cipher keys
-from ciphertexts
+from ciphertexts.
 
 ## Build
 
@@ -10,10 +10,12 @@ from ciphertexts
 make
 ```
 
+Binary will be written to `./build/solve`
+
 ## Example usage
 
 ```
-./build/solve txt/shakespeare-encrypted.txt | head -c 1024
+./build/solve txt/shakespeare-encrypted.txt
 ```
 
 ## References
